@@ -1,0 +1,25 @@
+name: Unzip project
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "eos-site.zip"
+permissions:
+  contents: write
+jobs:
+  unzip:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Unzip and clean up
+        run: |
+          unzip -o eos-site.zip
+          rm eos-site.zip
+          rm .github/workflows/unzip.yml
+      - name: Commit files
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add -A
+          git commit -m "Add EOS project files"
+          git push
